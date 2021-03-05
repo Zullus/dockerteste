@@ -1,0 +1,33 @@
+[ req ]
+default_bits       = 4096
+default_keyfile    = nginx-data/certs/shared.key
+default_md         = sha256
+prompt             = no
+encrypt_key        = no
+utf8               = yes
+string_mask        = utf8only
+
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_req
+
+[ req_distinguished_name ]
+countryName            = "BR"                                 # C=
+stateOrProvinceName    = "São Paulo"                          # ST=
+localityName           = "São Paulo"                          # L=
+postalCode             = "03819-290"                          # L/postalcode=
+streetAddress          = "Rua Otto Corde, 108"                # L/street=
+organizationName       = "XS Informática"                     # O=
+organizationalUnitName = "Ferraris"                           # OU=
+commonName             = "Desenvolvimento Ferraris"           # CN=
+emailAddress           = "xsinformatica@xsinformatica.com.br" # CN/emailAddress=
+
+[ v3_req ]
+# The subject alternative name extension allows various literal values to be 
+# included in the configuration file
+# http://www.openssl.org/docs/apps/x509v3_config.html
+subjectAltName = @alt_names
+
+[ alt_names ]
+#Local
+DNS.1 = teste.vm
+DNS.2 = www.teste.vm

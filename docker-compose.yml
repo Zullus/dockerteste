@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  
+  testeproxy:
+    container_name: testeproxy
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-data/certs:/etc/nginx/certs
+      - ./config/proxy.conf:/etc/nginx/proxy.conf
+      - ./logs/nginx/:/var/log/nginx/
+    networks:
+      - teste
+  
+  testephp:
+    image: 'zullus1701/apachephp:74ssl'
+    container_name: testephp
+    restart: always
+    ports:
+      - 8080:80
+      - 8443:443
+    volumes:
+      - ./www:/var/www/html
+      - ./config/teste.conf:/etc/apache2/sites-available/000-default.conf
+      - ./logs:/var/log/apache2/
+      - ./nginx-data/certs/shared.crt:/etc/apache2/ssl/cert.crt
+      - ./nginx-data/certs/shared.key:/etc/apache2/ssl/cert.key
+    env_file:
+      - ./environments/teste.env
+    networks:
+      teste:
+        aliases:
+          - teste.vm 
+          - www.teste.vm
+
+networks:
+  teste:
+    driver: bridge
+
